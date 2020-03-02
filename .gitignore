@@ -6,6 +6,7 @@
 .cache-main
 .cache-tests
 .history
+.idea
 .lib/
 dist/*
 target/
