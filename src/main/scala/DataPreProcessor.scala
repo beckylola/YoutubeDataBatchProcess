@@ -6,7 +6,7 @@ object DataPreProcessor {
 
    def preProcessOriginalDataset() = {
     val countryList = Array("CA", "DE", "FR", "GB", "IN", "JP", "KR", "MX", "RU", "US")
-    val sourceDataDir = "/Users/zouxuan/NusWorkspace/Semester3_Jan-May_2020/ProjectInfo/Data/youtube-new/"
+    val sourceDataDir = "src/main/dataset/"
     //  val sourceDataDir = "hdfs://localhost:9000/youbute_kaggle/"
     val destPath = "hdfs://localhost:9000/youtube_processed/finalDataSet.csv"
 
