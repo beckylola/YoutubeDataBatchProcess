@@ -1,6 +1,5 @@
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{col, explode, lit}
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.{SparkConf, SparkContext}
 
 object DataPreProcessor {
 
@@ -10,7 +9,7 @@ object DataPreProcessor {
     //  val sourceDataDir = "hdfs://localhost:9000/youbute_kaggle/"
     val destPath = "hdfs://localhost:9000/youtube_processed/finalDataSet.csv"
 
-    val sparkSession = getSparkSession
+    val sparkSession = Utils.getSparkSession
     val finalResult = countryList.map(country => getDatasetWithCategoryDescDf(country, sourceDataDir, sparkSession))
       .reduce(_.union(_))
     finalResult
@@ -20,14 +19,10 @@ object DataPreProcessor {
       .option("sep", ",")
       .mode("overwrite")
       .csv(destPath)
+     sparkSession.close()
   }
 
-  private def getSparkSession: SparkSession = {
-    val conf = new SparkConf().setAppName("YoutubeDataset").setMaster("local[2]")
-    val sparkContext = new SparkContext(conf)
-    val sparkSession = SparkSession.builder().appName("YoutubeDataset").getOrCreate()
-    sparkSession
-  }
+
 
   private def getDatasetWithCategoryDescDf(country: String, dataDir: String, sparkSession: SparkSession) = {
     val jsonDf: DataFrame = sparkSession.read.option("multiline", "true").json(dataDir + country + "_category_id.json")
@@ -43,5 +38,3 @@ object DataPreProcessor {
     finalDf
   }
 }
-
-
